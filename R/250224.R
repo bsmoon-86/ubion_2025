@@ -528,3 +528,8 @@ for (i in df3$group){
 print(large_cnt)
 print(middle_cnt)
 print(small_cnt)
+
+
+
+
+
