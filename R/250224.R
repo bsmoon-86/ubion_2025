@@ -508,9 +508,23 @@ midwest %>%
              )
            ))
 
-
-
-
-
-
-
+table(df3$group)
+# table 함수의 기능을 반복문으로 확인 
+df3$group
+large_cnt = 0
+middle_cnt = 0
+small_cnt = 0
+for (i in df3$group){
+    # 만약에 i가 large 라면?
+  if(i == 'large'){
+    # large_cnt를 1 증가시킨다. 
+    large_cnt = large_cnt + 1
+  }else if(i == 'middle'){
+    middle_cnt = middle_cnt + 1
+  }else{
+    small_cnt = small_cnt + 1
+  }
+}
+print(large_cnt)
+print(middle_cnt)
+print(small_cnt)
