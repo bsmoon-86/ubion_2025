@@ -3,13 +3,14 @@ from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 import time
 
+code = input('종목코드를 입력하시오')
+
 # 웹 브라우져 오픈 
 driver = webdriver.Chrome()
 
 # base_url 생성
 base_url = "https://finance.naver.com"
 sub_url = "/item/main.naver?code="
-code = input('종목코드를 입력하시오')
 
 # 특정 웹페이지로 이동
 driver.get(base_url+sub_url+code)
@@ -44,6 +45,7 @@ for href in href_list:
     try :
         # driver 요청
         driver.get(base_url+href)
+        time.sleep(2)
         # html 소스코드를 파싱 
         news_soup = bs(driver.page_source, 'html.parser')
         # h2태그중 id가 title_area인 태그의 텍스트 추출
@@ -60,9 +62,11 @@ for href in href_list:
         }
         # result에 news_dict을 추가
         result.append(news_dict)
+        print(news_title)
     # 예외 구문 
     except:
         continue
+driver.close()
 # result를 데이터프레임으로 생성
 df = pd.DataFrame(result)
 # 데이터프레임을 csv파일로 저장 
