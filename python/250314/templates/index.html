@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>
+        index page
+    </h1>
+    <p>
+        해당 페이지는 인덱스 페이지입니다. 
+    </p>
+    <!-- 
+        하이퍼링크 생성
+        상대 경로 : base_url + (상대경로)
+        절대 경로 : http://www.google.com, http://www.naver.com
+        일반적으로는 a태그 이용
+     -->
+    <a href="/second"> 세컨드 페이지로 이동 </a><br>
+    <a href="http://www.google.com"> 구글 페이지로 이동 </a><br>
+    <a href="http://www.naver.com"> 네이버 페이지로 이동 </a>
+    <br>
+    <!-- 유저가 입력할 수 있는 공간 -->
+    <h3>get 방식으로 데이터를 보내기</h3>
+    <form action="/login" method="get">
+        <!-- 실제 유저가 입력한 공간 태그 사용 -->
+        <input type="text" name="input_id">
+        <input type="password" name="input_pass">
+        <!-- 유저가 입력한 데이터를 서버에게 제출하기 위한 버튼 생성 -->
+        <input type="submit">
+    </form>
+
+    <h3>POST 방식으로 데이터를 보내기</h3>
+    <form action="/login_post" method="post">
+        <input type="text" name="post_id">
+        <input type="password" name="post_pass">
+        <input type="submit">
+    </form>
+    
+</body>
+</html>
