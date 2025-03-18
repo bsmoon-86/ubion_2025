@@ -10,8 +10,9 @@ app = Flask(__name__)
 # 존재 하지 않는다면 테이블을 생성 
 # 유저 테이블 생성 
 create_table = """
-    CREATE TABLE `user_list` 
-    IF NOT EXIST
+    CREATE TABLE  
+    IF NOT EXISTS
+    `user_list`
     (
         `id` varchar(32) primary key, 
         `password` varchar(64) not null, 
@@ -33,7 +34,37 @@ def index():
     # 로그인 화면을 보여준다. 
     return render_template('signin.html')
 
+# 로그인 화면에서 id password를 받아주는 주소를 생성 
+# /login, post 방식으로 데이터를 보낸다. 
+@app.route('/login', methods=['post'])
+def login():
+    # post 방식으로 보낸 데이터는 request 안에 form에 존재(dict)
+    # { 'user_id' : xxxx ,  'user_pass' : xxxx }
+    # 유저가 보낸 아이디값을 변수에 저장 
+    input_id = request.form['user_id']
+    input_pass = request.form['user_pass']
+    # 유저가 보낸 데이터를 확인 
+    print(f"[post] /login : {input_id}, {input_pass}")
 
+    # 로그인의 로직
+    # user_list table에서 
+    # 유저가 보낸 id, password를 모두 존재하는 인덱스가 있는가?
+    # sql 쿼리문 : select문 
+    login_query = """
+        SELECT 
+        * 
+        FROM 
+        `user_list`
+        WHERE `id` = %s AND `password` = %s
+    """
+    # execute_query()함수는 select문을 넣었을때 돌려주는 데이터의 타입은?
+    # DataFrame -> 데이터프레임의 길이가 0이면 -> 로그인이 실패
+    # 길이가 1이라면 -> 로그인이 성공
+    res_sql = web_db.execute_query(login_query, input_id, input_pass)
+    if len(res_sql):
+        return "로그인 성공"
+    else:
+        return "로그인 실패"
 
 
 
