@@ -90,7 +90,6 @@ def login():
             *
             FROM 
             `sales records`
-            LIMIT 20
         """
         sales_data = web_db.execute_query(select_query)
         # sales_data의 타입은? DataFrame
@@ -100,12 +99,27 @@ def login():
         # list_data에서 key
         cols = list_data[0].keys()
 
+        # sales_data 
+        # sales_data를 df에 copy()
+        df = sales_data.copy()
+        # -> 'Sales Channel'컬럼을 기준으로 그룹화 
+        # 'Total Prifit'데이터를 그룹화 연산 합계
+        group_data = df.groupby('Sales Channel')['Total Profit'].sum()
+        # index의 값을 리스트로 생성
+        group_index = list(group_data.index)
+        # value의 값을 리스트로 생성
+        group_value = group_data.to_list()
+        print(group_index)
+        print(group_value)
+
 
         # render_template(파일의 이름, key = value, key2 = value2, ...)
         return render_template('main.html', 
                                name = logined_name, 
                                columns = cols, 
-                               td_data = list_data)
+                               td_data = list_data, 
+                               x_data = group_index, 
+                               y_data = group_value)
     else:
         # 로그인이 실패했다면 로그인 페이지로 돌아간다. 
         # 로그인 주소로 이동('/')
@@ -160,6 +174,22 @@ def signup2():
         return redirect('/signup')
         # return을 회원가입이 실패한 경우 
         # 회원가입 페이지로 이동
+
+
+@app.route('/graph')
+def graph():
+    # select 쿼리문을 이용하여 sales records 전체 데이터를 로드 
+    # 결과 DataFrame에서 
+    # Order Date컬럼의 데이터를 시계열 데이터로 변경하여 저장
+    # 새로운 파생변수 Order Year을 생성하여 Order Date에서 
+    # 4글자의 년도를 추출하여 저장
+    # Sales Channel과 Order Year를 기준으로 그룹화 Total_profit의 합계
+    # online 데이터를 따로 추출
+    # offline 데이터를 따로 추출 
+    # online 데이터를 추출한 곳에서 index의 값을 리스트로 생성
+    # online 데이터의 value를 리스트로 생성
+    # offline 데이터의 value를 리스트로 생성
+    # graph.html 파일에 online, offline 막대그래프 생성
 
 # 웹서버의 실행 
 app.run(debug=True)
