@@ -90,15 +90,35 @@ def signup():
 def signup2():
     # form 태그를 이용해서 유저가 보낸 데이터 존재
     # id, password, name 의 값들을 각각 다른 변수에 저장
-
+    input_id = request.form['user_id']
+    input_pass = request.form['user_pass']
+    input_name = request.form['user_name']
+    # request.form --> { 'user_id':'xxx', 
+    #                    'user_pass' : 'xxxx', 
+    #                    'user_name':'xxxxx'} }
+    # input_id, input_pass, input_name = request.form.values()
     # 변수들 확인 print
-
+    print(f"[post] /signup2 : {input_id}, {input_pass}, {input_name}")
     # insert query문 생성
-
+    insert_query = """
+        INSERT INTO
+        `user_list` (`id`, `password`, `name`)
+        VALUES ( %s, %s, %s )
+    """
     # try
+    try:
         # MyDB class에 내장된 함수 execute_query() 함수를 호출 
-        # 로그인 페이지로 이동
+        web_db.execute_query(insert_query, 
+                             input_id, 
+                             input_pass, 
+                             input_name,
+                             inplace=True)
+        # 로그인 페이지로 이동 
+        return redirect('/')
     # except
+    except Exception as e :
+        print(e)
+        return redirect('/signup')
         # return을 회원가입이 실패한 경우 
         # 회원가입 페이지로 이동
 
