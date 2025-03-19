@@ -11,5 +11,65 @@
         <!-- 로그인을 한 유저의 이름을 보여주고 안녕하세요!를 추가 -->
         {{name}}님 안녕하세요!
     </p>
+    <!-- <p>{{columns}}</p>
+    <p>{{td_data}}</p> -->
+    <!-- 기본적인 table 태그 생성 -->
+    <table border="1">
+        <tr>
+            <!-- columns의 개수만큼 반복 실행 th 태그를 생성 -->
+            {% for col in columns %}
+                <th>{{col}}</th>
+            {% endfor %}
+        </tr>
+        <!-- for문 시작 -->
+         <!-- td_data :  [ {
+                                'col1' : 'value1', 
+                                'col2' : 'value2', 
+                                ...
+                                'col13' : 'value13'
+                            }, ....
+                            ] -->
+        {% for row_data in td_data %}
+        <!-- row_data 
+            {'Region': 'Sub-Saharan Africa', 
+            'Country': 'Chad', 
+            'Item Type': 'Office Supplies', 
+            'Sales Channel': 'Online', 
+            'Order Priority': 'L', 
+            'Order Date': '1/27/2011', 
+            'Order ID': 292494523, 
+            'Ship Date': '2/12/2011', 
+            'Units Sold': 4484, 
+            'Unit Price': 651.21, 
+            'Unit Cost': 524.96, 
+            'Total Revenue': 2920025.64, 
+            'Total Cost': 2353920.64, 
+            'Total Profit': 566105.0}
+        row_data['Regoin'] -> 'Sub-Saharan Africa'
+        -->
+            <tr>
+                <!-- 다중 반복문 사용 -->
+                {% for col in columns %}
+                    <!-- 열을 생성 -->
+                    <td> {{ row_data[col] }} </td>
+                {% endfor %}
+                <!-- <td>{{row_data['Region']}}</td>
+                <td>{{row_data['Country']}}</td>
+                <td>{{row_data['Item Type']}}</td>
+                <td>{{row_data['Sales Channel']}}</td>
+                <td>{{row_data['Order Priority']}}</td>
+                <td>{{row_data['Order Date']}}</td>
+                <td>{{row_data['Order ID']}}</td>
+                <td>{{row_data['Ship Date']}}</td>
+                <td>{{row_data['Units Sold']}}</td>
+                <td>{{row_data['Unit Price']}}</td>
+                <td>{{row_data['Unit Cost']}}</td>
+                <td>{{row_data['Total Revenue']}}</td>
+                <td>{{row_data['Total Cost']}}</td>
+                <td>{{row_data['Total Profit']}}</td> -->
+            </tr>
+        <!-- for문 종료 -->
+        {% endfor %}
+    </table>
 </body>
 </html>

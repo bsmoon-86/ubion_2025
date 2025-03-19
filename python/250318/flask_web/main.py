@@ -84,8 +84,28 @@ def login():
         # session의 데이터의 형태는 dict
         # session에 데이터를 대입
         session['login_info'] = request.form
+        # DataBase에 있는 sales records table를 로드 
+        select_query = """
+            SELECT 
+            *
+            FROM 
+            `sales records`
+            LIMIT 20
+        """
+        sales_data = web_db.execute_query(select_query)
+        # sales_data의 타입은? DataFrame
+        # DataFrame을 [ { }, { }, ... ] 형태로 변환
+        list_data = sales_data.to_dict(orient='records')
+        # html table 에 필요한 데이터를 컬럼의 이름들을 변수에 따로 저장
+        # list_data에서 key
+        cols = list_data[0].keys()
+
+
         # render_template(파일의 이름, key = value, key2 = value2, ...)
-        return render_template('main.html', name = logined_name)
+        return render_template('main.html', 
+                               name = logined_name, 
+                               columns = cols, 
+                               td_data = list_data)
     else:
         # 로그인이 실패했다면 로그인 페이지로 돌아간다. 
         # 로그인 주소로 이동('/')
