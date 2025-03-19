@@ -1,9 +1,17 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session
 from database import MyDB
+from dotenv import load_dotenv
+import os
+
+# .env 로드 
+load_dotenv()
 
 # Flask class 생성
 # 생성자 함수에는 파일의 이름
 app = Flask(__name__)
+
+# 세션을 사용하기 위해 secret_key를 설정
+app.secret_key = os.getenv('secret_key')
 
 # DB server에 웹에서 사용할 table이 존재하는가?
 # 존재한다면 아무 행동도 하지 않는다. 
@@ -72,6 +80,10 @@ def login():
         # res_sql['name'][0]
         logined_name = res_sql.loc[0, 'name']
         # return "로그인 성공"
+        # session에 로그인 정보를 담는다. 
+        # session의 데이터의 형태는 dict
+        # session에 데이터를 대입
+        session['login_info'] = request.form
         # render_template(파일의 이름, key = value, key2 = value2, ...)
         return render_template('main.html', name = logined_name)
     else:
@@ -83,7 +95,14 @@ def login():
 # 회원 가입 페이지를 보여주는 api 생성
 @app.route("/signup")
 def signup():
-    return render_template('signup.html')
+    # 로그인이 되어있는 상태라면 해당 페이지를 보여주지 않는다. 
+    # 로그인이 되어있는 상태 : session에서 login_info 키가 존재하는가?
+    # dict데이터에서 val1, val2, val3 = dict --> val1, val2, val3에는 dict 의 키값들이 대입
+    # dict 데이터에서 in 비교연산자 -> 키값에 존재 유무
+    if 'login_info' in session:
+        return render_template('home.html')
+    else:
+        return render_template('signup.html')
 
 # 실제 회원 데이터를 받아서 DB에 저장하는 api 생성
 @app.route('/signup2', methods=['post'])

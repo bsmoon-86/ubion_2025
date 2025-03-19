@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Redirect with POST</title>
+    <script>
+        function postRedirect(url, data) {
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = url;
+
+            for (const key in data) {
+                if (data.hasOwnProperty(key)) {
+                    const hiddenField = document.createElement("input");
+                    hiddenField.type = "hidden";
+                    hiddenField.name = key;
+                    hiddenField.value = data[key];
+                    form.appendChild(hiddenField);
+                }
+            }
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        window.onload = function() {
+            postRedirect("/login", { 'user_id' : 'test', 'user_pass' : '1234' });
+        };
+    </script>
+</head>
+<body>
+    <h1>POST 요청을 보내는 중...</h1>
+</body>
+</html>
