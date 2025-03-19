@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, session
 from database import MyDB
 from dotenv import load_dotenv
 import os
+import pandas as pd
 
 # .env 로드 
 load_dotenv()
@@ -190,6 +191,22 @@ def graph():
     # online 데이터의 value를 리스트로 생성
     # offline 데이터의 value를 리스트로 생성
     # graph.html 파일에 online, offline 막대그래프 생성
+    select_query = """
+        select * from `sales records`
+    """
+    res = web_db.execute_query(select_query)
+    res['Order Date'] = pd.to_datetime(res['Order Date'])
+    res['Order Year'] = res['Order Date'].dt.strftime('%Y')
+    group_data = res.groupby(['Sales Channel', 'Order Year'])['Total Profit'].sum()
+    online_data = group_data['Online']
+    offline_data = group_data['Offline']
+
+    data_index = list(online_data.index)
+    online_values = online_data.values.tolist()
+    offline_values = offline_data.values.tolist()
+    print(online_values)
+
+    return render_template('graph.html', x_data = data_index, online = online_values, offline = offline_values)
 
 # 웹서버의 실행 
 app.run(debug=True)
