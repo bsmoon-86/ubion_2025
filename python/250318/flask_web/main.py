@@ -79,9 +79,28 @@ def login():
         # 로그인 주소로 이동('/')
         # return "로그인 실패"
         return redirect('/')
+    
+# 회원 가입 페이지를 보여주는 api 생성
+@app.route("/signup")
+def signup():
+    return render_template('signup.html')
 
+# 실제 회원 데이터를 받아서 DB에 저장하는 api 생성
+@app.route('/signup2', methods=['post'])
+def signup2():
+    # form 태그를 이용해서 유저가 보낸 데이터 존재
+    # id, password, name 의 값들을 각각 다른 변수에 저장
 
+    # 변수들 확인 print
 
+    # insert query문 생성
+
+    # try
+        # MyDB class에 내장된 함수 execute_query() 함수를 호출 
+        # 로그인 페이지로 이동
+    # except
+        # return을 회원가입이 실패한 경우 
+        # 회원가입 페이지로 이동
 
 # 웹서버의 실행 
 app.run(debug=True)
