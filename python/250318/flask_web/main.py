@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from database import MyDB
 
 # Flask class 생성
@@ -62,12 +62,26 @@ def login():
     # 길이가 1이라면 -> 로그인이 성공
     res_sql = web_db.execute_query(login_query, input_id, input_pass)
     if len(res_sql):
-        return "로그인 성공"
+        # 로그인이 성공했다면 특정 페이지 보여준다.(render_template(파일의 이름))
+        # 로그인이 성공했다면 특정 주소로 이동(redirect(주소값))
+        # main.html와 같이 로그인을 한 유저의 이름을 보낸다. 
+        # res_sql       id    password    name
+        #            0 test    1234       kim
+        # res_sql에서 이름만 추출한다면? 
+        # res_sql.loc[0, 'name'] // res_sql.iloc[0, 2]
+        # res_sql['name'][0]
+        logined_name = res_sql.loc[0, 'name']
+        # return "로그인 성공"
+        # render_template(파일의 이름, key = value, key2 = value2, ...)
+        return render_template('main.html', name = logined_name)
     else:
-        return "로그인 실패"
+        # 로그인이 실패했다면 로그인 페이지로 돌아간다. 
+        # 로그인 주소로 이동('/')
+        # return "로그인 실패"
+        return redirect('/')
 
 
 
 
 # 웹서버의 실행 
-app.run()
+app.run(debug=True)
