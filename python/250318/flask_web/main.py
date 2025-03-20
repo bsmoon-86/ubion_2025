@@ -181,10 +181,16 @@ def signup2():
 def graph():
     # select 쿼리문을 이용하여 sales records 전체 데이터를 로드 
     # 결과 DataFrame에서 
-    # Order Date컬럼의 데이터를 시계열 데이터로 변경하여 저장
+    # Order Date컬럼의 데이터를 시계열 데이터로 변경하여 저장(%m/%d/%Y)
     # 새로운 파생변수 Order Year을 생성하여 Order Date에서 
     # 4글자의 년도를 추출하여 저장
     # Sales Channel과 Order Year를 기준으로 그룹화 Total_profit의 합계
+    #    index          Total_Profit
+    #  Online , 2010    float(xxxxxx)
+    #  Online , 2011    float(xxxxxx)
+    #  Offline , 2010   float(xxxxxx)
+    #  Offline , 2011   float(xxxxxx)
+
     # online 데이터를 따로 추출
     # offline 데이터를 따로 추출 
     # online 데이터를 추출한 곳에서 index의 값을 리스트로 생성
@@ -197,7 +203,9 @@ def graph():
     res = web_db.execute_query(select_query)
     res['Order Date'] = pd.to_datetime(res['Order Date'])
     res['Order Year'] = res['Order Date'].dt.strftime('%Y')
+    res['Order Year2'] = res['Order Date'].dt.year
     group_data = res.groupby(['Sales Channel', 'Order Year'])['Total Profit'].sum()
+    # group_data의 타입은 Series
     online_data = group_data['Online']
     offline_data = group_data['Offline']
 

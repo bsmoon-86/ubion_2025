@@ -6,31 +6,37 @@
     <title>Document</title>
 </head>
 <body>
+    <!-- 실제 그래프가 그려지는 부분 -->
     <div>
         <canvas id="myChart"></canvas>
     </div>
-    
+    <!-- 그래프를 그려주는 라이브러리 호출 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+    <!-- 그래프를 그리는 클래스를 생성 -->
     <script>
+        // html 문서 안에서 ID 속성의 값이 myChart인 태그를 ctx 변수에 저장
         const ctx = document.getElementById('myChart');
-        
+        // Chart Class 생성 ( 실제 그래프를 그려주는 부분분 )
         new Chart(ctx, {
-            type: 'bar',
+            // type : 그래프의 종류
+            type: 'line',
             data: {
-                // labels : x축 데이터
+            // labels : x축 데이터
             labels: {{x_data | tojson}},
-            datasets: [{
-                label: 'online',
-                // data : y축 데이터
-                data: {{online | tojson}},
-                borderWidth: 1
-            }, {
-                label: 'offline',
-                // data : y축 데이터
-                data: {{offline | tojson}},
-                borderWidth: 1
-            }]
+            // datasets : y축의 데이터들을 입력하는 부분 
+            datasets: [
+                {
+                    label: 'online',
+                    // data : y축 데이터
+                    data: {{online | tojson}},
+                    borderWidth: 1
+                }, {
+                    label: 'offline',
+                    // data : y축 데이터
+                    data: {{offline | tojson}},
+                    borderWidth: 1
+                }
+            ]
             }
         });
     </script>
