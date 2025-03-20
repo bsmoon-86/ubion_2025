@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <!-- 디자인 css 작성 -->
+     <!-- class가 a인 태그들은 보여주지 않는다. -->
+    <style>
+        .a{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <p id = 'p0'></p>
+    <p id="p1">
+        1234
+    </p>
+    <p>
+        Hello
+    </p>
+    <button>Button</button>
+    <script>
+        // p 태그를 선택
+        // document.getElementsByTagName('p')
+        // css(속성명, 속성값) : 디자인은 대입
+        // p 태그를 모두 선택하여 글자의 색상을 red로 변경경 
+        $('p').css('color', 'red')
+        // 태그중 id가 p0인 태그를 선택 
+        // document.getElementById('p0')
+        // 선택자 : 태그네임, id( #id명 ), class( .class명 )
+        // p0 id 값을 가진 태그를 선택하여 <b>Title</b> 대입
+        $('#p0').html('<b>Title</b>')
+        // button이라는 태그를 선택하여 
+        // button이 클릭되었을때
+        $('button').click(
+            // 특정한 행동을 한다? -> 함수를 생성
+            // JS에서는 함수는 function 키워드를 이용하여 생성
+            function (){
+                // id가 p1인 태그를 선택
+                // 해당하는 태그를 숨긴다. 
+                // $('#p1').hide()
+                // id가 p1인 태그를 선택하여
+                // class에 a가 있으면 지우고
+                // 없으면 생성
+                $('#p1').toggleClass('a')
+            }
+        )
+    </script>
+</body>
+</html>

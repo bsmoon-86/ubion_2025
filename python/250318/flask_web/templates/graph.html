@@ -10,6 +10,9 @@
     <div>
         <canvas id="myChart"></canvas>
     </div>
+    <div>
+        <canvas id="myChart2"></canvas>
+    </div>
     <!-- 그래프를 그려주는 라이브러리 호출 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- 그래프를 그리는 클래스를 생성 -->
@@ -30,7 +33,20 @@
                     // data : y축 데이터
                     data: {{online | tojson}},
                     borderWidth: 1
-                }, {
+                }
+            ]
+            }
+        });
+        
+        const ctx2 = document.getElementById('myChart2');
+        new Chart(ctx2, {
+            // type : 그래프의 종류
+            type: 'line',
+            data: {
+            // labels : x축 데이터
+            labels: {{x_data | tojson}},
+            // datasets : y축의 데이터들을 입력하는 부분 
+            datasets: [{
                     label: 'offline',
                     // data : y축 데이터
                     data: {{offline | tojson}},

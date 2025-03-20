@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>    
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- 유저가 입력하는 input 태그를 2개 생성 -->
+    <input type="password" name="user_pass" id="pass1"><br>
+    <input type="password" name="user_pass2" id="pass2"><br>
+    <!-- 패스워드 일치 여부 -->
+    <p></p>
+    <!-- 버튼이 패스워드가 일치하는 경우에만 활성화화 -->
+    <input type="submit" id="submit" disabled>
+    <script>
+        // id가 pass2인 태그를 선택하고 
+        // 유저가 값을 입력하고 있을때
+        $('#pass2').keyup(
+            function(){
+                // pass1의 입력된 데이터를 변수에 저장 
+                let pass1 = $('#pass1').val()
+                let pass2 = $('#pass2').val()
+                // pass1과 pass2 같다면 : 조건식
+                if ( pass1 == pass2 ){
+                    // p태그를 선택하여 html태그를 대입
+                    $('p').html('<b>비밀번호 일치</b>')
+                    // input button의 활성화
+                    $('#submit').attr('disabled', false)
+                }else{
+                    $('p').html('<b>비밀번호 불일치</b>')
+                    // 비활성화
+                    $('#submit').attr('disabled', true)
+                }
+            }
+        )
+    </script>
+</body>
+</html>
