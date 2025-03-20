@@ -17,6 +17,10 @@
         <option value="3">보</option>
      </select>
      <button> 시작 </button>
+     <!-- 게임의 결과를 보여주는 빈 태그 생성 -->
+      <ul>
+
+      </ul>
      <script>
         // button 태그가 클릭이 되면
         $('button').click(
@@ -24,7 +28,41 @@
                 // id가 user_select인 태그의 값을 팝업창에 띄워준다.
                 let user_select =  $('#user_select').val()
                 // 팝업창 열기 
-                alert(user_select)
+                // alert(user_select)
+                // 비동기 통신으로 웹 서버에 보낸다. 
+                $.ajax(
+                    // dict 형태로 인자 값을 생성
+                    // 주소, 방식, 받아오는 데이터의 타입, 보내는 데이터
+                    {
+                        url : '/game_result', 
+                        method : 'get', 
+                        dataType : 'json', 
+                        data : {
+                            'user' : user_select
+                        }
+                    }
+                )
+                // 데이터를 보내고 난 후 데이터를 받는 부분
+                .then(
+                    function(res){
+                        // res 변수는 서버가 보낸 데이터가 저장되어있는 변수
+                        // 서버가 보낸 데이터를 이용하여 html을 변경 
+                        // { 'user' : 유저가 선택한 값(가위, 바위 , 보) , 'server' : 서버가 선택한 값
+                        //  'result' : 게임의 결과}
+                        // 게임의 결과를 ul 태그 안에 li태그로 추가 
+                        $('ul').append(
+                            `
+                                <li>
+                                    유저 : ${res['user']}, 
+                                    서버 : ${res['server']}, 
+                                    결과 : ${res['result']}
+                                </li>
+                            `
+                        )
+                    }
+
+                )
+                // $.ajax().then()
             }
         )
      </script>

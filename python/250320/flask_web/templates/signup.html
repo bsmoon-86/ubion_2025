@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% include 'header.html' %}
+    <style>
+        .display_none {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <form action="/signup2" method="post">
+        <!-- 아이디를 입력하는 공간 -->
+        <div>
+            <div>
+                <label>ID</label>
+                <input type="text" name="user_id" id="input_id">
+                <!-- 아이디 중복체크 버튼 생성 -->
+                <span class="btn btn-danger">아이디 중복체크</span>
+            </div>
+        </div>
+        <!-- 비밀번호들을 입력하는 공간 (처음 페이지가 시작하면 보여주지 않는다.)-->
+        <div id="pass_area" class="display_none">
+            <div>
+                <input type="password" name="user_pass" id="input_pass1">
+            </div>
+            <div>
+                <input type="password" id="input_pass2">
+            </div>
+        </div>
+        <!-- 개인 정보를 입력하는 공간 (처음 페이지가 시작하면 보여주지 않는다.)-->
+        <div id="user_area" class="display_none">
+            <div>
+                <input type="text" name="user_name">
+            </div>
+        </div>
+        <input id="submit_button" type="submit" value="회원가입" class="btn btn-primary"  disabled>
+    </form>
+    <!-- 
+        jquery를 이용해서 span 태그를 선택하고 해당 태그가 클릭되었을때
+        서버에게 유저가 입력한 id 값을 보낸다. (비동기)
+        서버에서는 해당 데이터를 받아서 DB안에 해당 ID가 존재하는가?
+        존재한다면 { 'check_id' : false }
+        존재 하지 않는다면 { 'check_id' : true } 
+        을 return한다. 
+        return 데이터를 이용하여 false라면 팝업창 하나 띄워서 아이디 사용불가
+        true라면 팝업창에 사용가능 비밀번호를 입력하는 공간을 보여준다
+    -->
+    <script>
+        // pass1과 pass2가 같다면 user_area를 보여준다.
+        // pass2에 데이터의 입력이 되는 keyup()
+        $('#input_pass1, #input_pass2').keyup(
+            function(){
+                // pass1의 value, pass2의 value를 변수에 저장
+                let pass1 = $('#input_pass1').val()
+                let pass2 = $('#input_pass2').val()
+                if (pass1 == pass2){
+                    // user_area를 보여준다
+                    $('#user_area').removeClass('display_none')
+                    // submit_button을 활성화
+                    $('#submit_button').attr('disabled', false)
+                }else{
+                    $('#user_area').addClass('display_none')
+                    $('#submit_button').attr('disabled', true)
+                }
+            }
+        )
+
+        $('span').click(
+            function(){
+                // id가 input_id 태그의 value를 불러온다. 
+                let user_id = $('#input_id').val()
+                // 서버에게 비동기 통신을 보낸다. 
+                $.ajax(
+                    {
+                        url : '/check_id', 
+                        method : 'post', 
+                        dataType : 'json', 
+                        data : {
+                            'user_id' : user_id
+                        }
+                    }
+                ).then(
+                    function(res){
+                        // res -> { 'check_id' : bool }
+                        if (res['check_id']){
+                            // 사용 가능 아이디 
+                            alert('아이디 사용 가능')
+                            // 비밀번호를 입력하는 공간은 보여준다. 
+                            $('#pass_area').removeClass('display_none')
+                            // 아이디를 입력한 공간 읽기 전용(수정 불가)
+                            $('#input_id').attr('readonly', true)
+                        }else{
+                            alert('아이디 사용 불가')
+                        }
+                    }
+                )
+            }
+        )
+    </script>
+</body>
+</html>
