@@ -6,6 +6,15 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <!-- form 태그를 이용하여 유저의 닉네임을 받은 후 
+     /game url로 보낸다. -->
+    <form action="/game" method="get">
+        <div>
+            <input type="text" name="nickname" required>
+        </div>
+        <div>
+            <input type="submit" value="게임 시작">
+        </div>
+    </form>
 </body>
 </html>

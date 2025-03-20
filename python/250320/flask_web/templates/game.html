@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- jQeury // bootstrap 로그하는 코드를 다른 html에서 불러온다. -->
+     {% include "header.html" %}
+</head>
+<body>
+    <!-- 유저가 가위, 바위, 보 를 선택할수 있는 공간 생성 -->
+     <!-- 유저가 선택한 값을 서버에게 보낸다. -->
+      <!-- 비동기 방식으로 화면은 그대로 유지하고 데이터만 서버에 보낸다. -->
+     <select id = 'user_select'>
+        <option value="1">가위</option>
+        <option value="2">바위</option>
+        <option value="3">보</option>
+     </select>
+     <button> 시작 </button>
+     <script>
+        // button 태그가 클릭이 되면
+        $('button').click(
+            function(){
+                // id가 user_select인 태그의 값을 팝업창에 띄워준다.
+                let user_select =  $('#user_select').val()
+                // 팝업창 열기 
+                alert(user_select)
+            }
+        )
+     </script>
+</body>
+</html>
