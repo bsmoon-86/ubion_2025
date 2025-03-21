@@ -9,25 +9,12 @@
   const myChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday'
-      ],
+      // x축 데이터터
+      labels: {{x_data | tojson}},
+      // y축의 데이터들들
       datasets: [{
-        data: [
-          15339,
-          21345,
-          18483,
-          24003,
-          23489,
-          24092,
-          12034
-        ],
+        // data -> y축 데이터터
+        data: {{y_data | tojson}},
         lineTension: 0,
         backgroundColor: 'transparent',
         borderColor: '#007bff',
