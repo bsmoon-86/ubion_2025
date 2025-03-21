@@ -10,6 +10,10 @@ app = Flask(__name__)
 # MyDB Class 생성
 web_db = MyDB()
 
+# 127.0.0.1:5000/ url 생성
+@app.route('/')
+
+
 # dashboard를 보여주는 url 생성 
 @app.route("/dashboard")
 def dashboard():
