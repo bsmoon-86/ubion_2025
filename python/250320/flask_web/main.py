@@ -7,7 +7,7 @@ from database import MyDB
 app = Flask(__name__)
 
 web_db = MyDB(
-    host = '172.30.1.59', 
+    host = '172.30.1.60', 
     port = 3306, 
     user = 'ubion', 
     pwd= '1234', 
@@ -116,6 +116,42 @@ def signup2():
     }
     print(f"[post] /check_id : returndata {return_data}")
     return return_data
+
+# 회원의 정보를 받아와서 DB에 insert하는 url
+@app.route('/signup2', methods=['post'])
+def signup3():
+    # 회원 가입 페이지에서 유저가 입력한 데이터들을 모두 변수에 저장 
+    # id, pass1, pass2, name 4개의 부분에서 입력 
+    # id, pass1, name 입력 공간에는 name 속성이 존재
+    # pass2는 name 속성이 존재하지 않는다(해당하는 데이터는 받을수 없다)
+    print(f"[post] /signup2 : {request.form}")
+    # request.form -> { 'user_id' : xxxx, 
+    #                   'user_pass' : xxxxx, 
+    #                   'user_name': xxxx }
+    user_id = request.form['user_id']
+    user_pass = request.form['user_pass']
+    user_name = request.form['user_name']
+
+    # 에러가 발생하는 경우 ( try ... except ...)
+    # DB 서버에 insert 작업 
+    # insert후 DB 에 commit까지 바로
+    # insert 가 정상적으로 작동을 했다면 -> 로그인 페이지('/')로 이동 redirect()
+    try: 
+        insert_query = """
+            INSERT INTO 
+            `user_list`
+            VALUES (%s, %s, %s)
+        """
+        web_db.execute_query(insert_query, 
+                            user_id, 
+                            user_pass, 
+                            user_name, 
+                            inplace=True)
+        return redirect('/')
+    # 정상적으로 작동하지 않으면 -> 회원 가입 페이지('/signup')로 이동 
+    except Exception as e:
+        print(f"[post] /signup2 : ERROR {e}")
+        return redirect('/signup')
 
 
 # 웹 서버 시작
