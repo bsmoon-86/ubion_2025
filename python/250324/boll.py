@@ -18,6 +18,9 @@ def create_band(
         result.set_index('Date', inplace = True)
     # index를 시계열 데이터로 변경 
     result.index = pd.to_datetime(result.index, format='%Y-%m-%d')
+    # index에 tz 속성에 값이 존재하면 None 변경 
+    if result.index.tz:
+        result.index = result.index.tz_localize(None)
     # 결측치, 무한대를 제외시킨다. 
     flag = result.isin( [np.nan, np.inf, -np.inf] ).any(axis=1)
     result = result.loc[~flag, [_col]]
@@ -35,9 +38,9 @@ def create_band(
             end = datetime.strptime(_end, '%Y-%m-%d')
         else:
             end = _end
-        # print(type(end))
-        start = pd.Timestamp(start, tz='UTC')
-        end = pd.Timestamp(end, tz='UTC')
+        # # print(type(end))
+        # start = pd.Timestamp(start, tz='UTC')
+        # end = pd.Timestamp(end, tz='UTC')
     except:
         print('시작 시간과 종료 시간의 포멧은 YYYY-mm-dd 입니다.')
         return ''
