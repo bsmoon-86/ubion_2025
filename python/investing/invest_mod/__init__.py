@@ -1,5 +1,5 @@
 # 4개의 투자전략 모듈을 로드 
-from invest.quant import bnh
+from python.invest.quant import buyandhold
 from invest.quant import bollinger as boll
 from invest.quant import halloween as hw
 from invest.quant import momentum as mmt
@@ -9,7 +9,7 @@ import numpy as np
 import yfinance as yf
 
 import importlib
-importlib.reload(bnh)
+importlib.reload(buyandhold)
 importlib.reload(boll)
 importlib.reload(hw)
 importlib.reload(mmt)
@@ -57,7 +57,7 @@ class Invest:
         self.col = _col
     
     def buyandhold(self):
-        result , acc_rtn = bnh.buyandhold(
+        result , acc_rtn = buyandhold.buyandhold(
             self.df, self.col ,self.start, self.end)
         print(acc_rtn)
         return result, acc_rtn
