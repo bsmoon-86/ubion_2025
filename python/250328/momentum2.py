@@ -172,6 +172,57 @@ def create_trading(_df, _codes):
 
 
 # 수익율 계산하는 함수 
+def multi_returns(_df, _codes):
+    book = _df.copy()
+    rtn = 1
+    buy_dict = dict()
+    sell_dict = dict()
 
+    # 반복문 생성 (인덱스 기준)
+    for idx in book.index:
+        # _codes 기준 반복문
+        for code in _codes:
+            # 매수 : 2일전에 "" 1일전에 "ready" 오늘이 'buy'
+            col = f"p_{code}"
+            if (book.shift(2).loc[idx, col] == '') & \
+                (book.shift(1).loc[idx, col] == f'ready_{code}') & \
+                    (book.loc[idx, col] == f'buy_{code}'):
+                # buy_dict에 키: 벨류 추가 
+                buy_dict[code] = book.loc[idx, code]
+                print(f"매수일 : {idx}, 매수종목 : {code}, 매수가 : {buy_dict[code]}")
+            # 매도 : 1일전에 'buy' 오늘이 ''
+            elif (book.shift(1).loc[idx, col] == f"buy_{code}") & \
+                (book.loc[idx, col] == ''):
+                sell_dict[code] = book.loc[idx, code]
+                # 수익율 계산
+                rtn = sell_dict[code] / buy_dict[code]
+                # 수익율 r_code 컬럼에 대입 
+                book.loc[idx, f"r_{code}"] = rtn
+                print(f"매도일 : {idx}, 매도 종목 : {code}, 매도가 : {sell_dict[code]}, 수익율 : {rtn}")
+            # dict 초기화
+            if book.loc[idx, col] == '':
+                buy_dict[code] = ''
+                sell_dict[code] = ''
+    return book
 
-# 누적 수익율을 계산하는 함수수
+# 누적 수익율을 계산하는 함수
+def multi_acc_returns(_df, _codes):
+    book = _df.copy()
+    # 누적 수익율 변수 생성
+    acc_rtn = 1
+
+    # 데이터프레임을 반복
+    for idx in book.index:
+        count = 0
+        rtn = 0
+        for code in _codes:
+            col = f"r_{code}"
+            # 수익이 존재하는가?
+            if book.loc[idx, col]:
+                count += 1
+                rtn += book.loc[idx, col]
+        if (rtn != 0) & (count != 0):
+            acc_rtn *= (rtn / count)
+            print(f"누적 매도일 : {idx}, 매도 종목수 : {count}, 수익율 : {round(acc_rtn, 2)}")
+        book.loc[idx, 'acc_rtn'] = acc_rtn
+    return book, acc_rtn    
