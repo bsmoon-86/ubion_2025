@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>event test1</title>
+    {% include 'ga.html' %}
+    <script>
+        // web 접속 이벤트 하나 생성 
+        // 구글애널리틱스에 데이터를 보낸다. 
+        gtag(
+            'event', 
+            'visit_index', 
+            {
+                test_arg : 'test'
+            }
+        )
+        function seleted(_select){
+            // _select가 1이면 짜장면
+            if (_select == 1){
+                location.href='/item_info?item=1'
+            }else{
+                location.href='/item_info?item=2'
+            }
+        }
+    </script>
+</head>
+<body>
+    <ul>
+        <li>
+            <button onclick="seleted(1)">짜장면</button>
+        </li>
+        <li>
+            <button onclick="seleted(2)">짬뽕</button>
+        </li>
+    </ul>
+</body>
+</html>

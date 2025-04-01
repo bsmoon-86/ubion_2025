@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>event test3</title>
+    {% include 'ga.html' %}
+    <script>
+        function load(){
+            // 최종 결제 금액을 변수에 대입 
+            let price = {{price}}
+            gtag(
+                'event', 
+                'purchase', 
+                {
+                    currency : 'KRW', 
+                    value : price
+                }
+            )
+        }
+    </script>
+</head>
+<body onload="load()">
+    <h1>주문 완료</h1>
+    <p>주문 금액은 {{price}}입니다</p>
+</body>
+</html>

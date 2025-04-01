@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>event test2</title>
+    {% include 'ga.html' %}
+    <script>
+        function load(){
+            // js 변수 생성
+            let select = {{selected}}
+            let item
+            if (select == 1){item = '짜장'
+            }else{item = '짬뽕'}
+            gtag('event', 'select_item', {item : item})
+        }
+        function cnt_select(){
+            // input태그 중 name이 cnt인 태그를 선택해서 value를 불러온다.
+            let cnt = document.getElementsByName('cnt')[0].value
+            // alert(cnt)
+            gtag(
+                'event', 'cnt_select', {cnt : cnt}
+            )
+        }
+    </script>
+</head>
+<body onload="load()">
+    <form action = '/shop' method="get">
+    <!-- selected 값이 1이라면 짜장면의 가격을 보여준다 -->
+        {% if selected == 1 %}
+            <label>가격</label>
+            <input type="number" value="7000" name="price" readonly>
+            <br>
+            <label>수량</label>
+            <input type="number" name="cnt">
+            <br>
+        {% else %}
+            <label>가격</label>
+            <input type="number" value="8000" name="price" readonly>
+            <br>
+            <label>수량</label>
+            <input type="number" name="cnt">
+            <br>
+        {% endif %}
+        <input type="submit" onclick="cnt_select()" value = '주문'>
+    </form>
+</body>
+</html>
